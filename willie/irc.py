@@ -455,9 +455,11 @@ class Bot(asynchat.async_chat):
                 self.debug("core: error reporting", "(From: " + origin.sender +
                            "), can't save traceback: " + str(e), 'always')
 
-            self.msg(origin.sender, signature)
+            if getattr(self.config, 'errors_to_sender', 'True') == 'True':
+                self.msg(origin.sender, signature)
         except Exception as e:
-            self.msg(origin.sender, "Got an error.")
+            if getattr(self.config, 'errors_to_sender', 'True') == 'True':
+                self.msg(origin.sender, "Got an error.")
             self.debug("core: error reporting", "(From: " + origin.sender +
                        ") " + str(e), 'always')
 
